@@ -1,0 +1,211 @@
+/* Estilos para a página inicial */
+.home-container {
+    display: flex;
+    flex-direction: row; /* Garante que os itens sejam dispostos em linha */
+    align-items: stretch; /* Faz com que os filhos do container se estiquem para ocupar a altura total */
+    flex-wrap: wrap; /* Permite que os itens se ajustem conforme a largura da tela */
+
+    background-color: #f5f5f5;
+    min-height: 100vh;
+}
+
+.left-home-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    color: #06547E;
+    text-align: center;
+    margin: 10 auto 10px;
+    font-weight:bolder;
+}
+
+.left-home-subtext {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #6C6C6C;
+    text-align: center;
+    margin: 0 auto 30px;
+    margin-top: -10px;
+    white-space: nowrap; /* Adicionado para prevenir quebra de linha */
+}
+
+
+.left-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px; /* Espaço entre o left-container e o right-container */
+}
+
+.left-card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box; /* Garante que padding não adicione largura ao elemento */
+    overflow-y: auto; /* Permite rolagem se conteúdo exceder a altura */
+    max-height: 90vh; /* Limita altura para evitar rolagem da página */
+}
+
+.left-card h2 {
+    color: #06547E;
+    font-family: 'Inter', sans-serif;
+}
+
+.left-card p {
+    color: #6C6C6C;
+    font-family: 'Inter', sans-serif;
+}
+
+.input-container-home {
+    text-align: left; /* Alinha a legenda à esquerda */
+    margin-bottom: 20px;
+}
+
+.input-container-home label {
+    color: #6C6C6C;
+    font-family: 'Inter', sans-serif;
+}
+
+.input-container-home {
+    display: flex;
+    flex-direction: column; /* Coloca o label acima do input */
+    align-items: flex-start; /* Alinha itens à esquerda */
+    margin-bottom: 10px;
+}
+
+.input-container-home input {
+    width: 80%;
+    padding: 15px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #CDCDCD;
+}
+
+.input-container-home select {
+    width: 90%;
+    padding: 15px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #CDCDCD;
+    margin-bottom: 10px;
+}
+
+
+
+
+/* Estilos ao passar o mouse sobre inputs e selects */
+.input-container-home input:hover,
+.input-container-home select:hover {
+    background-color: #f3f3f3; /* Azul suave ao passar o mouse */
+    border: 1px solid #155f8e;
+}
+
+/* Estilos quando inputs e selects estão focados ou ativos */
+.input-container-home input:focus,
+.input-container-home select:focus,
+.input-container-home input:active,
+.input-container-home select:active {
+    background-color: #f3f3f3; /* Azul um pouco mais forte ao clicar ou focar */
+    border: 1px solid #155f8e;
+    outline: none; /* Remove o contorno padrão para evitar sobreposições visuais indesejadas */
+}
+
+
+.register-button {
+    background-color: #06547E;
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 90%;
+}
+
+.right-container {
+    flex-grow: 1; /* Faz o right-container ocupar todo o espaço restante */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+
+    border-radius: 15px; /* Estilo opcional para combinar com o left-card */
+    overflow-y: auto; /* Permite rolagem se o conteúdo exceder a altura */
+}
+
+.right-card {
+    flex-grow: 1; /* Faz o right-container ocupar todo o espaço restante */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh; /* Limita altura para evitar rolagem da página */
+    background-color: #ffffff;
+
+    border-radius: 15px; /* Estilo opcional para combinar com o left-card */
+    overflow-y: auto; /* Permite rolagem se o conteúdo exceder a altura */
+}
+
+
+
+/* Estilos para o rodapé */
+.footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f5f5;
+    width: 100%;
+    padding: 0px 0;
+}
+
+.logo {
+    min-width: 220.85px;
+    min-height: 61px;
+    margin-top: -5px;
+}
+
+
+/* Usando Media Queries para ajustar o layout baseado no tamanho da tela */
+@media (max-width: 768px) {
+    .left-container, .right-container {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+
+
+
+    .input-container-home {
+        text-align: left; /* Alinha a legenda à esquerda */
+        margin-bottom: 20px;
+    }
+    
+    .input-container-home label {
+        color: #6C6C6C;
+        font-family: 'Inter', sans-serif;
+    }
+    
+    .input-container-home input,
+    .input-container-home select {
+
+        padding: 10px;
+        margin-top: 5px;
+        border-radius: 5px;
+        border: 1px solid #CDCDCD;
+    }
+
+    
+}
+
+/* Ajustando o left-card para evitar que exceda a altura da tela */
+.left-card {
+    max-height: 85vh; /* 90% da altura da viewport */
+    overflow-y: auto; /* Permite rolagem vertical se o conteúdo exceder a altura */
+}
+
+
+
+
+
+
+
+
+
