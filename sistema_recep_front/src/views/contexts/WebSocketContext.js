@@ -20,8 +20,8 @@ export const WebSocketProvider = ({ children}) => {
 
     const initializeWebSocket = useCallback((withId) => {
         const wsURL = withId 
-            ? `ws://192.168.254.82:8000/ws/manage_cadastro/`
-            : `ws://192.168.254.82:8000/ws/manage_cadastro/`;
+            ? `ws://192.168.254.166:8000/ws/manage_cadastro/`
+            : `ws://192.168.254.166:8000/ws/manage_cadastro/`;
 
         const socketRef = withId ? socketRefWithId : socketRefWithoutId;
         if (!socketRef.current || socketRef.current.readyState === WebSocket.CLOSED) {

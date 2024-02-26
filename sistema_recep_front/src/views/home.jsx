@@ -509,7 +509,7 @@ const Home = ({ setSocketRefCallback }) => {
     };
     const enviarAssinaturaParaServidor = async (id, assinaturaBlob) => {
         console.log("ID do visitante ao enviar para o servidor:", id);
-        const url = `http://192.168.254.82:8000/api/manage_visitante/${id}/`;
+        const url = `http://192.168.254.166:8000/api/manage_visitante/${id}/`;
         const token = sessionStorage.getItem('token');
 
         const formData = new FormData();
@@ -584,11 +584,11 @@ const Home = ({ setSocketRefCallback }) => {
     useEffect(() => {
         // Verifica se o WebSocket já está aberto, caso contrário, inicializa
         if (!socketRefWithId.current || socketRefWithId.current.readyState === WebSocket.CLOSED) {
-            socketRefWithId.current = new WebSocket(`ws://192.168.254.82:8000/ws/manage_cadastro/`);
+            socketRefWithId.current = new WebSocket(`ws://192.168.254.166:8000/ws/manage_cadastro/`);
         }
 
         if (!socketRefWithoutId.current || socketRefWithoutId.current.readyState === WebSocket.CLOSED) {
-            socketRefWithoutId.current = new WebSocket(`ws://192.168.254.82:8000/ws/manage_cadastro/`);
+            socketRefWithoutId.current = new WebSocket(`ws://192.168.254.166:8000/ws/manage_cadastro/`);
         }
 
     }, [socketRefWithId, socketRefWithoutId, initializeWebSocket]);
@@ -596,8 +596,8 @@ const Home = ({ setSocketRefCallback }) => {
     const fetchVisitantes = useCallback(async () => {
         setIsLoading(true);
         // Adiciona o parâmetro de ordenação na URL de entradas
-        const urlVisitantes = 'http://192.168.254.82:8000/api/manage_visitante/';
-        const urlEntradas = 'http://192.168.254.82:8000/api/manage_entrada/?ordering=-data_hora_entrada';
+        const urlVisitantes = 'http://192.168.254.166:8000/api/manage_visitante/';
+        const urlEntradas = 'http://192.168.254.166:8000/api/manage_entrada/?ordering=-data_hora_entrada';
         const token = sessionStorage.getItem('token');
 
         try {
@@ -705,7 +705,7 @@ const Home = ({ setSocketRefCallback }) => {
 
 
         // Verificação da existência do CPF
-        const urlVerificaCPF = `http://192.168.254.82:8000/api/manage_visitante/?cpf=${CPF}`;
+        const urlVerificaCPF = `http://192.168.254.166:8000/api/manage_visitante/?cpf=${CPF}`;
         try {
             const respostaCPF = await axios.get(urlVerificaCPF, {
                 headers: { 'Authorization': `Bearer ${sessionStorage.getItem('token')}` },
@@ -765,7 +765,7 @@ const Home = ({ setSocketRefCallback }) => {
             return;
         }
 
-        const url_visitante = `http://192.168.254.82:8000/api/manage_visitante/`;
+        const url_visitante = `http://192.168.254.166:8000/api/manage_visitante/`;
 
         const token = sessionStorage.getItem('token');
 
@@ -789,7 +789,7 @@ const Home = ({ setSocketRefCallback }) => {
 
 
 
-            const url_entrada = `http://192.168.254.82:8000/api/manage_entrada/`;
+            const url_entrada = `http://192.168.254.166:8000/api/manage_entrada/`;
 
             // Cadastrando a entrada
             const responseEntrada = await axios.post(url_entrada, formDataEntrada, {
@@ -886,7 +886,7 @@ const Home = ({ setSocketRefCallback }) => {
 
 
     const salvarEdicao = async (id, novoNome) => {
-        const url = `http://192.168.254.82:8000/api/manage_visitante/${id}/`;
+        const url = `http://192.168.254.166:8000/api/manage_visitante/${id}/`;
         const token = sessionStorage.getItem('token');
         const headers = {
             'Authorization': `Bearer ${token}`,
@@ -934,11 +934,11 @@ const Home = ({ setSocketRefCallback }) => {
 
         try {
             // Primeiro, exclui todas as entradas relacionadas ao visitante
-            const urlEntradas = `http://192.168.254.82:8000/api/manage_entrada/por_visitante/${id}/`;
+            const urlEntradas = `http://192.168.254.166:8000/api/manage_entrada/por_visitante/${id}/`;
             await axios.delete(urlEntradas, { headers });
 
             // Depois, exclui o visitante
-            const urlVisitante = `http://192.168.254.82:8000/api/manage_visitante/${id}/`;
+            const urlVisitante = `http://192.168.254.166:8000/api/manage_visitante/${id}/`;
             await axios.delete(urlVisitante, { headers });
 
 
@@ -983,7 +983,7 @@ const Home = ({ setSocketRefCallback }) => {
     };
     const buscarEntradasDoVisitante = async (visitanteId) => {
 
-        const url = `http://192.168.254.82:8000/api/manage_entrada/buscar_por_visitante/${visitanteId}`;
+        const url = `http://192.168.254.166:8000/api/manage_entrada/buscar_por_visitante/${visitanteId}`;
         const token = sessionStorage.getItem('token');
         try {
             const response = await axios.get(url, {
@@ -998,7 +998,7 @@ const Home = ({ setSocketRefCallback }) => {
     };
 
     const enviarNovaEntrada = async () => {
-        const url = `http://192.168.254.82:8000/api/manage_entrada/`;
+        const url = `http://192.168.254.166:8000/api/manage_entrada/`;
         const token = sessionStorage.getItem('token');
         const formData = new FormData();
         formData.append('gabinete', selectedGabinete);
