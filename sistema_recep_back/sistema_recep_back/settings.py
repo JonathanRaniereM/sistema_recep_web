@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'corsheaders',
     'djoser',
+    'django_filters',
     'channels',
     'channels_redis',
     'rest_framework_simplejwt',
@@ -115,6 +116,7 @@ MIDDLEWARE = [
 CORS_ALLOW_ALL_ORIGINS = True
 
 ALLOWED_HOSTS = ['192.168.254.82', 'localhost', '127.0.0.1']
+
 
 CORS_ALLOWED_ORIGINS = [
     "http://192.168.254.82:3000",  # O frontend React está rodando aqui

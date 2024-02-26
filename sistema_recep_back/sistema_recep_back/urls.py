@@ -19,12 +19,20 @@ from django.urls import path, include,re_path
 from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 from django.conf import settings
-router = DefaultRouter()
 
 from app_recepcao.views import (
-    LoginAPI,LogoutAPI
+    LoginAPI,LogoutAPI,TblVisitanteViewSet, RegistroEntradaViewSet
 
 )
+
+router = DefaultRouter()
+router.register(r'api/manage_visitante', TblVisitanteViewSet)
+router.register(r'api/manage_entrada', RegistroEntradaViewSet)
+
+
+
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,6 +41,7 @@ urlpatterns = [
     path('api/login/', LoginAPI.as_view(), name='api-login'),
     path('api/logout/', LogoutAPI.as_view(), name='logout_api'),
     path('', include(router.urls)),  # Inclui todas as URLs do router do DRF
+    
 ]
 urlpatterns += router.urls
 if settings.DEBUG:
