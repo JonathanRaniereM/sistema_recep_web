@@ -1118,6 +1118,23 @@ const Home = ({ setSocketRefCallback }) => {
                                 <option value="GAB.SOTER">GAB.STÁLIN</option>
                                 <option value="GAB.VALDECY C.">GAB.VALDECY C.</option>
                                 <option value="GAB.WILTON D.">GAB.WILTON D.</option>
+                                <option value="ALMOXARIFADO">ALMOXARIFADO</option>
+                                <option value="A.T.L">A.T.L</option>
+                                <option value="A.T.F">A.T.F</option>
+                                <option value="A.T.C">A.T.C</option>
+                                <option value="ASVEC">ASVEC</option>
+                                <option value="ASCOM">ASCOM</option>
+                                <option value="CERIMONIAL">CERIMONIAL</option>
+                                <option value="COMISSÕES ">COMISSÕES </option>
+                                <option value="COMPRAS">COMPRAS</option>
+                                <option value="CONTROLADORIA">CONTROLADORIA</option>
+                                <option value="ESCOLA">ESCOLA</option>
+                                <option value="GERÊNCIA">GERÊNCIA</option>
+                                <option value="PRESIDENCIA">PRESIDENCIA</option>
+                                <option value="T.I">T.I</option>
+                                <option value="RH">RH</option>
+                                <option value="OUVIDORIA">OUVIDORIA</option>
+                                <option value="PLENARIO">PLENARIO</option>
                        
                             </select>
                         </div>
@@ -1360,6 +1377,23 @@ const Home = ({ setSocketRefCallback }) => {
                                 <option value="GAB.SOTER">GAB.STÁLIN</option>
                                 <option value="GAB.VALDECY C.">GAB.VALDECY C.</option>
                                 <option value="GAB.WILTON D.">GAB.WILTON D.</option>
+                                <option value="ALMOXARIFADO">ALMOXARIFADO</option>
+                                <option value="A.T.L">A.T.L</option>
+                                <option value="A.T.F">A.T.F</option>
+                                <option value="A.T.C">A.T.C</option>
+                                <option value="ASVEC">ASVEC</option>
+                                <option value="ASCOM">ASCOM</option>
+                                <option value="CERIMONIAL">CERIMONIAL</option>
+                                <option value="COMISSÕES ">COMISSÕES </option>
+                                <option value="COMPRAS">COMPRAS</option>
+                                <option value="CONTROLADORIA">CONTROLADORIA</option>
+                                <option value="ESCOLA">ESCOLA</option>
+                                <option value="GERÊNCIA">GERÊNCIA</option>
+                                <option value="PRESIDENCIA">PRESIDENCIA</option>
+                                <option value="T.I">T.I</option>
+                                <option value="RH">RH</option>
+                                <option value="OUVIDORIA">OUVIDORIA</option>
+                                <option value="PLENARIO">PLENARIO</option>
                         </select>
                         <button onClick={enviarNovaEntrada}>Confirmar</button>
                         <table>
