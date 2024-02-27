@@ -25,7 +25,7 @@ Este projeto foi desenvolvido em colaboração com um colega de equipe, visando 
 
 ## Como Utilizar
 
-[Inclua instruções específicas sobre como utilizar o sistema, como configurá-lo, quais são os requisitos, etc.]
+[Incluir instruções ...]
 
 ## Contribuição
 
