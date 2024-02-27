@@ -21,13 +21,15 @@ from rest_framework.routers import DefaultRouter
 from django.conf import settings
 
 from app_recepcao.views import (
-    LoginAPI,LogoutAPI,TblVisitanteViewSet, RegistroEntradaViewSet
+    LoginAPI,LogoutAPI,TblVisitanteViewSet, RegistroEntradaViewSet,getUserIdByUsername,TblVisitanteViewSetLixeira,RegistroEntradaViewSetLixeira
 
 )
 
 router = DefaultRouter()
 router.register(r'api/manage_visitante', TblVisitanteViewSet)
 router.register(r'api/manage_entrada', RegistroEntradaViewSet)
+router.register(r'api/manage_visitante_lixeira', TblVisitanteViewSetLixeira)
+router.register(r'api/manage_entrada_lixeira', RegistroEntradaViewSetLixeira)
 
 
 
@@ -40,6 +42,7 @@ urlpatterns = [
     path('auth/', include('djoser.urls.jwt')),
     path('api/login/', LoginAPI.as_view(), name='api-login'),
     path('api/logout/', LogoutAPI.as_view(), name='logout_api'),
+    path('api/get_user_id/', getUserIdByUsername, name='get_user_id'),
     path('', include(router.urls)),  # Inclui todas as URLs do router do DRF
     
 ]

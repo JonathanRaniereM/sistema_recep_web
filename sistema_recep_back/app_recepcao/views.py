@@ -41,10 +41,37 @@ class LogoutAPI(APIView):
         return Response({'status': 'success', 'message': 'Logout bem-sucedido!'}, status=status.HTTP_200_OK)
     
     
+from django.contrib.auth.models import User
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from .models import Login
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getUserIdByUsername(request):
+    username = request.query_params.get('username', None)
+    if username is not None:
+        try:
+            # Primeiro, encontra o usuário pelo username
+            user = User.objects.get(username=username)
+            # Em seguida, tenta encontrar a instância de Login relacionada a esse usuário
+            login = Login.objects.get(user=user)
+            # Retorna o ID da instância de Login, não do User
+            return Response({'login_id': login.id})
+        except User.DoesNotExist:
+            return Response({'error': 'Usuário não encontrado'}, status=404)
+        except Login.DoesNotExist:
+            # Trata o caso em que o usuário existe, mas não há uma instância de Login relacionada
+            return Response({'error': 'Login associado ao usuário não encontrado'}, status=404)
+    else:
+        return Response({'error': 'Nome de usuário não fornecido'}, status=400)
+
+    
     
 from rest_framework import viewsets
-from .models import TblVisitante, RegistroEntrada
-from .serializers import TblVisitanteSerializer, RegistroEntradaSerializer
+from .models import TblVisitante, RegistroEntrada,TblVisitante_lixeira,RegistroEntrada_lixeira
+from .serializers import TblVisitanteSerializer, RegistroEntradaSerializer,TblVisitanteLixeiraSerializer,RegistroEntradaLixeiraSerializer
 from rest_framework.decorators import action
 from rest_framework import filters
 from django.db.models import OuterRef, Subquery
@@ -95,3 +122,27 @@ class RegistroEntradaViewSet(viewsets.ModelViewSet):
         entradas.delete()
 
         return Response({"message": "Entradas excluídas com sucesso."}, status=status.HTTP_204_NO_CONTENT)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+class TblVisitanteViewSetLixeira(viewsets.ModelViewSet):
+    queryset = TblVisitante_lixeira.objects.all()
+    serializer_class = TblVisitanteLixeiraSerializer
+
+    
+    
+
+class RegistroEntradaViewSetLixeira(viewsets.ModelViewSet):
+    serializer_class = RegistroEntradaLixeiraSerializer
+
+    queryset = RegistroEntrada_lixeira.objects.all()
+   
+  
+
+   

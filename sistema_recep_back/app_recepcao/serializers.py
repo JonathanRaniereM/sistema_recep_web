@@ -1,7 +1,8 @@
 from rest_framework import serializers
-from .models import TblVisitante, RegistroEntrada,Login
+from .models import TblVisitante, RegistroEntrada,Login,TblVisitante_lixeira,RegistroEntrada_lixeira
 
 class TblVisitanteSerializer(serializers.ModelSerializer):
+    login = serializers.PrimaryKeyRelatedField(queryset=Login.objects.all(), required=False, allow_null=True)
     class Meta:
         model = TblVisitante
         fields = '__all__'
@@ -16,7 +17,21 @@ class RegistroEntradaSerializer(serializers.ModelSerializer):
         
         
 class LoginSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Login
+        fields = '__all__'
+
+
+class TblVisitanteLixeiraSerializer(serializers.ModelSerializer):
+    login = serializers.PrimaryKeyRelatedField(queryset=Login.objects.all(), required=False, allow_null=True)
+    class Meta:
+        model = TblVisitante_lixeira
+        fields = '__all__'
+
+class RegistroEntradaLixeiraSerializer(serializers.ModelSerializer):
+    visitante = serializers.PrimaryKeyRelatedField(queryset=TblVisitante_lixeira.objects.all(), required=False, allow_null=True)
+    class Meta:
+        model = RegistroEntrada_lixeira
         fields = '__all__'
 

@@ -390,6 +390,41 @@ const Home = ({ setSocketRefCallback }) => {
     };
 
 
+    async function getUserId() {
+        const username = sessionStorage.getItem('username');
+        const token = sessionStorage.getItem('token'); // Presumindo que você também armazene o token JWT
+    
+        if (!username) {
+            console.error('Username não encontrado no sessionStorage');
+            return null;
+        }
+    
+        try {
+            const response = await axios.get(`http://192.168.254.166:8000/api/get_user_id/?username=${username}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`, // Assegura que a requisição é autenticada
+                }
+            });
+    
+            console.log("Resposta da API:", response);
+    
+            // Checa se a resposta contém o campo login_id e o retorna
+            if (response.data && response.data.login_id) {
+                console.log("Esse é o ID do login", response.data.login_id)
+                return response.data.login_id;
+                
+            } else {
+                console.error('ID do login não encontrado na resposta');
+                return null;
+            }
+        } catch (error) {
+            console.error('Erro ao obter o ID do login:', error);
+            return null;
+        }
+    }
+    
+    
+
     const iniciarCapturaAssinatura = () => {
         visitanteIdRef.current = null;
         const message = {
@@ -623,6 +658,7 @@ const Home = ({ setSocketRefCallback }) => {
 
     useEffect(() => {
         fetchVisitantes();
+        getUserId();
     }, []);
 
 
@@ -724,6 +760,12 @@ const Home = ({ setSocketRefCallback }) => {
         formDataVisitante.append('cpf', CPF);
         formDataVisitante.append('telefone', Telefone);
         formDataVisitante.append('email', Email);
+
+        const LoginId = await getUserId(); // Adiciona o await aqui
+
+        if(LoginId){
+            formDataVisitante.append('login', LoginId);
+        }
 
         if (assinaturaImagem) {
             const base64Data = assinaturaImagem.split(';base64,').pop();
@@ -875,7 +917,84 @@ const Home = ({ setSocketRefCallback }) => {
 
 
 
+    const [selectedVisitanteBackup, setSelectedVisitanteBackup] = useState({
+        id: null,
+        nome: '',
+        cpf: '',
+        telefone: '',
+        email: '',
+        assinatura_digital: '',
+        login: null
+    });
+    const [motivoExclusao, setMotivoExclusao] = useState('');
 
+    const confirmarExclusao = async (e) => {
+        e.preventDefault(); // Previne o comportamento padrão de submissão de formulário
+        setIsModalConfirmDeleteVisible(false); // Fecha o modal
+    
+        // Função para inserir dados na lixeira
+        await inserirDadosLixeira();
+    
+        // Após inserir os dados na lixeira, chama a função de exclusão do visitante
+        await excluirVisitante(selectedVisitanteId);
+    };
+    
+    const inserirDadosLixeira = async () => {
+        const urlVisitanteLixeira = 'http://192.168.254.166:8000/api/manage_visitante_lixeira/';
+        const urlEntradaLixeira = 'http://192.168.254.166:8000/api/manage_entrada_lixeira/';
+        const token = sessionStorage.getItem('token');
+
+        console.log("Dados do visitante para lixeira antes do envio:", {
+            ...selectedVisitanteBackup,
+            motivo: motivoExclusao
+        });
+    
+        // Primeiro, insira o visitante na lixeira e obtenha o ID
+        const responseVisitanteLixeira = await axios.post(urlVisitanteLixeira, {
+            ...selectedVisitanteBackup,
+            data_hora_exclusao: moment().subtract(3, 'hours').toISOString(),
+            motivo: motivoExclusao
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        });
+
+        const visitanteLixeiraId = responseVisitanteLixeira.data.id;
+
+        console.log("Dados visitantes depois de enviar:",responseVisitanteLixeira.data)
+    
+        // Agora que você tem o visitanteLixeiraId, você pode logar e inserir as entradas corretamente
+        entradasDoVisitante.forEach(entrada => {
+            console.log("Dados da entrada para lixeira antes do envio:", {
+                ...entrada,
+                visitante: visitanteLixeiraId // Agora isso é válido porque visitanteLixeiraId foi definido
+
+            });
+        });
+
+    
+        // Para cada entrada do visitante, insere na lixeira
+        for (const entrada of entradasDoVisitante) {
+            const responseEntradaLixeira = await axios.post(urlEntradaLixeira, {
+                ...entrada,
+                visitante: visitanteLixeiraId // Agora isso é válido porque visitanteLixeiraId foi definido
+  
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+    
+            console.log("Resposta da inserção da entrada na lixeira:", responseEntradaLixeira.data);
+        }
+    
+        setIsModalConfirmDeleteVisible(false); // Fecha o modal
+    };
+    
+    
+
+    
 
     const [linhaEmEdicao, setLinhaEmEdicao] = useState(null);
 
@@ -975,12 +1094,16 @@ const Home = ({ setSocketRefCallback }) => {
         buscarEntradasDoVisitante(visitanteId);
     };
 
-    const abrirModalDelete = async (visitanteId) => {
+    const abrirModalDelete = (visitanteId, nome, cpf, telefone, email, login) => {
+        setSelectedVisitanteBackup({  nome: nome, cpf: cpf, telefone: telefone, email: email, login: login });
         setSelectedVisitanteId(visitanteId);
         setIsModalConfirmDeleteVisible(true);
-        // Aqui, você pode chamar a API para buscar as entradas deste visitante
+        setMotivoExclusao(''); // Resetar o motivo da exclusão
+      
         buscarEntradasDoVisitante(visitanteId);
     };
+
+
     const buscarEntradasDoVisitante = async (visitanteId) => {
 
         const url = `http://192.168.254.166:8000/api/manage_entrada/buscar_por_visitante/${visitanteId}`;
@@ -992,6 +1115,8 @@ const Home = ({ setSocketRefCallback }) => {
                 },
             });
             setEntradasDoVisitante(response.data);
+
+         
         } catch (error) {
             console.error("Erro ao buscar entradas do visitante", error.response?.data || error.message);
         }
@@ -1044,10 +1169,7 @@ const Home = ({ setSocketRefCallback }) => {
         }
     });
 
-    const confirmarExclusao = async (id) => {
-        setIsModalConfirmDeleteVisible(false); // Fecha o modal
-        await excluirVisitante(id); // Chama a função de exclusão
-    };
+
 
 
     const [isModalViewAssinatura, setIsModalViewAssinatura] = useState(false);
@@ -1238,7 +1360,7 @@ const Home = ({ setSocketRefCallback }) => {
                                                 <button onClick={() => iniciarEdicao(visitante.id, visitante.nome)} className='button-edit' title="Editar" >
                                                     <FontAwesomeIcon icon={faEdit} className='icon-edit-table'  />
                                                 </button>
-                                                <button onClick={() => abrirModalDelete(visitante.id)} className='button-delete' title="Excluir">
+                                                <button onClick={() => abrirModalDelete(visitante.id,visitante.nome,visitante.cpf,visitante.telefone,visitante.email,visitante.login)} className='button-delete' title="Excluir">
                                                     <FontAwesomeIcon icon={faTrash} className="icon-delete-table" />
                                                 </button>
 
@@ -1399,7 +1521,7 @@ const Home = ({ setSocketRefCallback }) => {
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Gabinete</th>
+                                    <th>Gabinete/Setor</th>
                                     <th>Data/Hora Entrada</th>
                                 </tr>
                             </thead>
@@ -1416,18 +1538,29 @@ const Home = ({ setSocketRefCallback }) => {
                 </div>
             }
 
-            {isModalConfirmDeleteVisible &&
-                <div className="modal-background" onClick={() => setIsModalConfirmDeleteVisible(false)}>
-                    <div className="modal-delete" onClick={e => e.stopPropagation()}>
-                        <h2>Confirmação</h2>
-                        <p>Tem certeza que deseja excluir este cadastro?</p>
-                        <div className="modal-actions">
-                            <button onClick={() => confirmarExclusao(selectedVisitanteId)}>Confirmar</button>
-                            <button onClick={() => setIsModalConfirmDeleteVisible(false)}>Cancelar</button>
-                        </div>
-                    </div>
-                </div>
-            }
+{isModalConfirmDeleteVisible &&
+    <div className="modal-background" onClick={() => setIsModalConfirmDeleteVisible(false)}>
+        <form className="modal-delete" onClick={e => e.stopPropagation()} onSubmit={confirmarExclusao}>
+            <h2>Confirmação</h2>
+            <p>Tem certeza que deseja excluir este cadastro?</p>
+            <label htmlFor="motivoExclusao" className="textarea-label">Motivo:</label>
+            <textarea
+                required
+                id="motivoExclusao"
+                placeholder="Motivo da exclusão"
+                value={motivoExclusao}
+                onChange={(e) => setMotivoExclusao(e.target.value)}
+                className="textarea-motivo"
+            ></textarea>
+            <div className="modal-actions">
+                <button type="submit">Confirmar</button>
+                <button type="button" onClick={() => setIsModalConfirmDeleteVisible(false)}>Cancelar</button>
+            </div>
+        </form>
+    </div>
+}
+
+
 
 {isModalViewAssinatura &&
                 <div className="modal-background" onClick={() => setIsModalConfirmDeleteVisible(false)}>
