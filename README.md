@@ -19,6 +19,6 @@ Este projeto foi desenvolvido em colaboração com um colega de equipe, visando 
 
 Para incorporar um GIF demonstrativo do sistema em seu README, você pode seguir o exemplo abaixo, substituindo `URL_DO_SEU_GIF` pelo link direto para o GIF hospedado em seus arquivos:
 
-```markdown
-![Demonstração do Sistema](C:\Users\marci\Downloads\20240227_114057)
+
+<img width="470" src="https://user-images.githubusercontent.com/20240227_114057.gif">
 
