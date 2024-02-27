@@ -14,11 +14,26 @@ Este projeto apresenta uma solução inovadora de sistema de recepção web, des
 ## Motivação
 
 Este projeto foi desenvolvido em colaboração com um colega de equipe, visando atender à necessidade de um sistema de controle de entradas e horários de visitas na Recepção da Câmara Municipal de Montes Claros. A solução busca otimizar o gerenciamento de visitantes, garantindo um controle eficiente e seguro das atividades realizadas dentro da instituição.
+## Demonstração do Sistema
+
+<img width="470" src="https://user-images.githubusercontent.com/20240227/114057.gif">
+
+Certifique-se de substituir `https://user-images.githubusercontent.com/20240227/114057.gif` pelo URL do seu GIF.
 
 ## Como Utilizar
 
-Para incorporar um GIF demonstrativo do sistema em seu README, você pode seguir o exemplo abaixo, substituindo `URL_DO_SEU_GIF` pelo link direto para o GIF hospedado em seus arquivos:
+[Inclua instruções específicas sobre como utilizar o sistema, como configurá-lo, quais são os requisitos, etc.]
 
+## Contribuição
 
-<img width="470" src="https://user-images.githubusercontent.com/20240227_114057.gif">
+Sua contribuição é bem-vinda! Se você tem interesse em contribuir para o projeto, por favor, leia o arquivo CONTRIBUTING.md para mais informações sobre como proceder.
 
+## Licença
+
+Este projeto está licenciado sob a Licença MIT - veja o arquivo LICENSE.md para mais detalhes.
+
+---
+
+Para mais informações, por favor, entre em contato conosco através de [inserir meio de contato].
+
+Agradecemos seu interesse e apoio ao nosso projeto!
