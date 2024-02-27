@@ -33,7 +33,7 @@ const Login = () => {
         try {
             console.log("Dados enviados:", data);
     
-            const response = await axios.post('http://192.168.254.166:8000/api/login/', data);
+            const response = await axios.post('http://192.168.254.82:8000/api/login/', data);
             
             console.log("Resposta da API:", response);
     
