@@ -1,70 +1,40 @@
-# Getting Started with Create React App
+# Sistema de Recepção Web Integrado com Terminal Eletrônico de Assinatura
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Sobre o Projeto
 
-## Available Scripts
+Este projeto apresenta uma solução inovadora de sistema de recepção web, desenvolvido com o foco em eficiência, segurança e conformidade com a legislação vigente. A principal funcionalidade do sistema é sua integração com o terminal eletrônico de assinatura da Topaz Systems, proporcionando uma experiência de uso ágil e segura para os usuários.
 
-In the project directory, you can run:
+### Características Principais
 
-### `npm start`
+- **Integração com Terminal Eletrônico de Assinatura**: Utilizamos tecnologia de ponta da Topaz Systems para garantir que as assinaturas coletadas sejam feitas de forma segura e eficaz.
+- **Conformidade com LGPD**: Nosso sistema segue rigorosamente todas as normas da Lei Geral de Proteção de Dados (LGPD) para a coleta e tratamento de dados, assegurando a privacidade e segurança das informações dos usuários.
+- **Armazenamento de Dados Seguro**: Os dados coletados são armazenados em um servidor MySQL, com todas as medidas de segurança de rede e autenticação em duas etapas implementadas para garantir a máxima proteção.
+- **Comunicação em Tempo Real**: Implementamos o Redis Server em conjunto com o Django Channels para enviar mensagens via WebSockets, assegurando que qualquer atualização realizada seja imediatamente refletida em todas as máquinas conectadas ao sistema.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Motivação
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Este projeto foi desenvolvido em colaboração com um colega de equipe, visando atender à necessidade de um sistema de controle de entradas e horários de visitas na Recepção da Câmara Municipal de Montes Claros. A solução busca otimizar o gerenciamento de visitantes, garantindo um controle eficiente e seguro das atividades realizadas dentro da instituição.
+## Demonstração do Sistema
 
-### `npm test`
+<img width="470" src="C:\Users\marci\Downloads\20240227_114057.gif">
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+Certifique-se de substituir `https://user-images.githubusercontent.com/20240227/114057.gif` pelo URL do seu GIF.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Como Utilizar
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+[Inclua instruções específicas sobre como utilizar o sistema, como configurá-lo, quais são os requisitos, etc.]
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Contribuição
 
-### `npm run eject`
+Sua contribuição é bem-vinda! Se você tem interesse em contribuir para o projeto, por favor, leia o arquivo CONTRIBUTING.md para mais informações sobre como proceder.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Licença
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Este projeto está licenciado sob a Licença MIT - veja o arquivo LICENSE.md para mais detalhes.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Para mais informações, por favor, entre em contato conosco através de [inserir meio de contato].
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Agradecemos seu interesse e apoio ao nosso projeto!
