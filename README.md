@@ -19,7 +19,7 @@ Este projeto foi desenvolvido em colaboração com um colega de equipe, visando 
 <img width="470" src="C:\Users\marci\OneDrive\Área de Trabalho\SISTEMA_RECEP_WEB\sistema_recep_front\src\views\assets\images\demonstrativo.gif">
 
 
-Certifique-se de substituir `https://user-images.githubusercontent.com/20240227/114057.gif` pelo URL do seu GIF.
+
 
 ## Como Utilizar
 
