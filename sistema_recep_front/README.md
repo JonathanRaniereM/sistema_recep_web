@@ -19,7 +19,7 @@ Este projeto foi desenvolvido em colaboração com um colega de equipe, visando 
 <img width="470" src="C:\Users\marci\Downloads\20240227_114057.gif">
 
 
-Certifique-se de substituir `https://user-images.githubusercontent.com/20240227/114057.gif` pelo URL do seu GIF.
+Certifique-se de substituir `https://user-images.githubusercontent.com/marci/sistema_recep_web/main/sistema_recep_front/src/views/assets/images/demonstrativo.gif` pelo URL do seu GIF.
 
 ## Como Utilizar
 
