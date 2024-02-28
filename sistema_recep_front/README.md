@@ -1,5 +1,7 @@
 # Sistema de Recepção Web Integrado com Terminal Eletrônico de Assinatura
 
+<img width="800" src="https://raw.githubusercontent.com/JonathanRaniereM/sistema_recep_web/main/sistema_recep_front/src/views/assets/images/demonstrativo.gif">
+
 ## Sobre o Projeto
 
 Este projeto apresenta uma solução inovadora de sistema de recepção web, desenvolvido com o foco em eficiência, segurança e conformidade com a legislação vigente. A principal funcionalidade do sistema é sua integração com o terminal eletrônico de assinatura da Topaz Systems, proporcionando uma experiência de uso ágil e segura para os usuários.
@@ -14,14 +16,7 @@ Este projeto apresenta uma solução inovadora de sistema de recepção web, des
 ## Motivação
 
 Este projeto foi desenvolvido em colaboração com um colega de equipe, visando atender à necessidade de um sistema de controle de entradas e horários de visitas na Recepção da Câmara Municipal de Montes Claros. A solução busca otimizar o gerenciamento de visitantes, garantindo um controle eficiente e seguro das atividades realizadas dentro da instituição.
-## Demonstração do Sistema
 
-<img width="470" src="C:\Users\marci\Downloads\20240227_114057.gif">
-
-
-
-
-<img width="600" src="https://raw.githubusercontent.com/JonathanRaniereM/sistema_recep_web/main/sistema_recep_front/src/views/assets/images/demonstrativo.gif">
 
 
 ## Como Utilizar
