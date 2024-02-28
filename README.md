@@ -9,7 +9,7 @@ Este projeto apresenta uma solução inovadora de sistema de recepção web, des
 ### Características Principais
 
 - **Integração com Terminal Eletrônico de Assinatura**: O sistema incorpora a avançada tecnologia de assinatura eletrônica da Topaz Systems, garantindo autenticação robusta e segura das assinaturas. Esse processo não apenas otimiza a eficácia da coleta de assinaturas mas também assegura a integridade e a verificabilidade dos dados assinados, essenciais para transações e consentimentos digitais.
-- 
+  
 - **Rigorosa Adesão à LGPD**: A arquitetura e operação do sistema são meticulosamente alinhadas com as disposições da Lei Geral de Proteção de Dados (LGPD), garantindo uma governança de dados impecável. Desde a coleta até o tratamento de dados pessoais, o sistema adota padrões de segurança de primeira linha para proteger as informações dos usuários, assegurando tanto a conformidade legal quanto a confiança dos usuários.
   
 - **Segurança de Dados Através de Armazenamento MySQL**: Utilizamos um repositório de dados MySQL, configurado com protocolos de segurança avançados, incluindo criptografia de dados em repouso e em trânsito, bem como autenticação em duas etapas. Essas medidas são projetadas para fornecer uma camada robusta de proteção contra acessos não autorizados, mitigando riscos de violações de dados e garantindo a integridade e a confidencialidade dos dados armazenados.
