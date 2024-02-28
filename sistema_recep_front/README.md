@@ -21,6 +21,9 @@ Este projeto foi desenvolvido em colaboração com um colega de equipe, visando 
 
 Certifique-se de substituir `https://user-images.githubusercontent.com/marci/sistema_recep_web/main/sistema_recep_front/src/views/assets/images/demonstrativo.gif` pelo URL do seu GIF.
 
+<img width="470" src="https://raw.githubusercontent.com/JonathanRaniereM/sistema_recep_web/main/sistema_recep_front/src/views/assets/images/demonstrativo.gif">
+
+
 ## Como Utilizar
 
 [Inclua instruções específicas sobre como utilizar o sistema, como configurá-lo, quais são os requisitos, etc.]
