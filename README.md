@@ -8,14 +8,19 @@ Este projeto apresenta uma solução inovadora de sistema de recepção web, des
 
 ### Características Principais
 
-- **Integração com Terminal Eletrônico de Assinatura**: Utilizamos tecnologia de ponta da Topaz Systems para garantir que as assinaturas coletadas sejam feitas de forma segura e eficaz.
-- **Conformidade com LGPD**: Nosso sistema segue rigorosamente todas as normas da Lei Geral de Proteção de Dados (LGPD) para a coleta e tratamento de dados, assegurando a privacidade e segurança das informações dos usuários.
-- **Armazenamento de Dados Seguro**: Os dados coletados são armazenados em um servidor MySQL, com todas as medidas de segurança de rede e autenticação em duas etapas implementadas para garantir a máxima proteção.
-- **Comunicação em Tempo Real**: Implementamos o Redis Server em conjunto com o Django Channels para enviar mensagens via WebSockets, assegurando que qualquer atualização realizada seja imediatamente refletida em todas as máquinas conectadas ao sistema.
+- **Integração com Terminal Eletrônico de Assinatura**: O sistema incorpora a avançada tecnologia de assinatura eletrônica da Topaz Systems, garantindo autenticação robusta e segura das assinaturas. Esse processo não apenas otimiza a eficácia da coleta de assinaturas mas também assegura a integridade e a verificabilidade dos dados assinados, essenciais para transações e consentimentos digitais.
+- 
+- **Rigorosa Adesão à LGPD**: A arquitetura e operação do sistema são meticulosamente alinhadas com as disposições da Lei Geral de Proteção de Dados (LGPD), garantindo uma governança de dados impecável. Desde a coleta até o tratamento de dados pessoais, o sistema adota padrões de segurança de primeira linha para proteger as informações dos usuários, assegurando tanto a conformidade legal quanto a confiança dos usuários.
+  
+- **Segurança de Dados Através de Armazenamento MySQL**: Utilizamos um repositório de dados MySQL, configurado com protocolos de segurança avançados, incluindo criptografia de dados em repouso e em trânsito, bem como autenticação em duas etapas. Essas medidas são projetadas para fornecer uma camada robusta de proteção contra acessos não autorizados, mitigando riscos de violações de dados e garantindo a integridade e a confidencialidade dos dados armazenados.
+  
+- **Sincronização em Tempo Real com Redis Server e Django Channels**: O emprego do Redis Server, em sinergia com Django Channels, permite uma comunicação em tempo real eficiente através de WebSockets. Essa configuração assegura que quaisquer atualizações de dados sejam imediatamente propagadas por todas as instâncias conectadas, garantindo uma experiência de usuário contínua e uma sincronização de dados impecável entre os terminais de serviço.
+
+- **Geração de Termo de Consentimento em PDF com Assinatura Eletrônica**: Como parte do nosso compromisso com a conformidade legislativa e segurança dos dados, o sistema automaticamente gera um termo de consentimento em PDF, incorporando as informações e a assinatura eletrônica do visitante. Esta funcionalidade não só simplifica o processo de obtenção e registro do consentimento em conformidade com a LGPD, mas também fornece um documento legalmente admissível que reforça a transparência e a segurança jurídica no armazenamento de dados dos visitantes.
 
 ## Motivação
 
-Este projeto foi desenvolvido em colaboração com um colega de equipe, visando atender à necessidade de um sistema de controle de entradas e horários de visitas na Recepção da Câmara Municipal de Montes Claros. A solução busca otimizar o gerenciamento de visitantes, garantindo um controle eficiente e seguro das atividades realizadas dentro da instituição.
+Portanto, a concepção deste sistema transcende a simples automação de processos; trata-se de uma resposta estratégica para modernizar a gestão de visitantes em uma instituição governamental, assegurando que ela possa cumprir suas funções de maneira segura, eficiente e transparente
 
 
 
