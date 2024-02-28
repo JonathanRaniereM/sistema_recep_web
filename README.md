@@ -17,7 +17,8 @@ Este projeto foi desenvolvido em colaboração com um colega de equipe, visando 
 ## Demonstração do Sistema
 
 
-<img width="470" src="https://github.com/marci/OneDrive/Área de Trabalho/SISTEMA_RECEP_WEB/sistema_recep_front/src/views/assets/images/demonstrativo.gif?raw=true">
+<img width="470" src="[https://github.com/marci/OneDrive/Área de Trabalho/SISTEMA_RECEP_WEB/sistema_recep_front/src/views/assets/images/demonstrativo.gif?raw=true](https://raw.githubusercontent.com/marci/sistema_recep_web/main/sistema_recep_front/src/views/assets/images/demonstrativo.gif
+)">
 
 
 
