@@ -4,7 +4,7 @@
 
 ## Sobre o Projeto
 
-Este projeto apresenta uma solução inovadora de sistema de recepção web, desenvolvido com o foco em eficiência, segurança e conformidade com a legislação vigente. A principal funcionalidade do sistema é sua integração com o terminal eletrônico de assinatura da Topaz Systems, proporcionando uma experiência de uso ágil e segura para os usuários.
+Desenvolvido com o foco em eficiência, segurança e conformidade com a legislação vigente. A principal funcionalidade do sistema é sua integração com o terminal eletrônico de assinatura da Topaz Systems, proporcionando uma experiência de uso ágil e segura para o armazenamento de dados.
 
 ### Características Principais
 
@@ -20,11 +20,21 @@ Este projeto apresenta uma solução inovadora de sistema de recepção web, des
 
 ## Motivação
 
-Portanto, a concepção deste sistema transcende a simples automação de processos; trata-se de uma resposta estratégica para modernizar a gestão de visitantes em uma instituição governamental, assegurando que ela possa cumprir suas funções de maneira segura, eficiente e transparente
+Este projeto foi desenvolvido em colaboração com um colega de equipe, visando atender à necessidade de um sistema de controle de entradas e horários de visitas na Recepção da Câmara Municipal de Montes Claros. A solução busca otimizar o gerenciamento de visitantes, garantindo um controle eficiente e seguro das atividades realizadas dentro da instituição.
 
 
 
-## Como Utilizar
+## Requisitos
+
+Esse sistema foi projetado para rodar em servidores linux Ubuntu.
+
+- Node 14.0v (ou acima)
+- Apache ou Nginx
+- Banco de dados MySQL
+- Git
+- Redis 6.0.1 (Server para mensagens websockets)
+Credenciais para senha única
+Acesso ao replicado (visão Pessoa - VUps, Estrutura - VUes e Financeiro - VUfi)
 
 [Inclua instruções específicas sobre como utilizar o sistema, como configurá-lo, quais são os requisitos, etc.]
 
