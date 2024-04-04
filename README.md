@@ -48,6 +48,6 @@ Este projeto está licenciado sob a Licença MIT - veja o arquivo LICENSE.md par
 
 ---
 
-Para mais informações, por favor, entre em contato conosco através de [inserir meio de contato].
+Para mais informações, por favor, entre em contato conosco através de enginerdeveloper7@gmail.com.
 
 Agradecemos seu interesse e apoio ao nosso projeto!
