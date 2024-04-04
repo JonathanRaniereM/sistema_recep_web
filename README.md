@@ -36,7 +36,6 @@ Esse sistema foi projetado para rodar em servidores linux Ubuntu.
 Credenciais para senha única
 Acesso ao replicado (visão Pessoa - VUps, Estrutura - VUes e Financeiro - VUfi)
 
-[Inclua instruções específicas sobre como utilizar o sistema, como configurá-lo, quais são os requisitos, etc.]
 
 ## Contribuição
 
