@@ -273,6 +273,7 @@
     font-family: 'Inter', sans-serif; /* Exemplo de fonte. Ajuste conforme necessário */
     position: relative;
     border-spacing: 0;
+
     
     
  
@@ -472,7 +473,7 @@
 
 
 /* Estilos para telas maiores (por exemplo, acima de 1200px para telas grandes) */
-@media (min-width: 1400px) {
+@media (min-width: 1440px) {
     .left-container, .right-container {
         padding: 40px; /* Aumenta o padding para usar mais espaço */
     }
@@ -543,20 +544,12 @@
         max-height: 85vh; /* Limita altura para evitar rolagem da página */
         min-height: 85vh;
     }
-
     .logo {
         min-width: 300px;
         min-height: 61px;
         margin-top: -35px;
     }
-
-    
-    
 }
-
-
-
-
 
 .popup-success-container {
     position: fixed;   /* Usando 'fixed' em vez de 'absolute' para que ele permaneça no mesmo lugar, mesmo se o usuário rolar a página */
@@ -615,7 +608,6 @@
     transform: translateY(0) scale(1);
     opacity: 1;
     white-space: nowrap;
-
 }
 
 .icons-pop-aviso{
@@ -982,3 +974,20 @@
     margin-top: 20px; /* Espaço acima do nome */
     margin-bottom: 10px; /* Espaço abaixo do nome, antes da imagem */
 }
+
+
+@keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .row-animation {
+    animation: slideIn 0.3s ease-out;
+  }
+  

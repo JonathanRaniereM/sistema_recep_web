@@ -69,7 +69,10 @@ CHANNEL_LAYERS = {
 
 
 
+
+
 REST_FRAMEWORK = {
+    
     'NON_FIELD_ERRORS_KEY': 'error',
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
     'TEST_REQUEST_RENDERER_CLASSES': [
@@ -83,7 +86,8 @@ REST_FRAMEWORK = {
     ],
         'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+
 }
 
 from datetime import timedelta

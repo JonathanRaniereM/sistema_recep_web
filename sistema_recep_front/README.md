@@ -16,14 +16,16 @@ Este projeto apresenta uma solução inovadora de sistema de recepção web, des
 Este projeto foi desenvolvido em colaboração com um colega de equipe, visando atender à necessidade de um sistema de controle de entradas e horários de visitas na Recepção da Câmara Municipal de Montes Claros. A solução busca otimizar o gerenciamento de visitantes, garantindo um controle eficiente e seguro das atividades realizadas dentro da instituição.
 ## Demonstração do Sistema
 
-<img width="470" src="C:\Users\marci\Downloads\20240227_114057.gif">
+<img width="470" src="https://user-images.githubusercontent.com/marci/sistema_recep_web/main/sistema_recep_front/src/views/assets/images/demonstrativo.gif">
 
 
-Certifique-se de substituir `https://user-images.githubusercontent.com/20240227/114057.gif` pelo URL do seu GIF.
+
+
+
 
 ## Como Utilizar
 
-[Inclua instruções específicas sobre como utilizar o sistema, como configurá-lo, quais são os requisitos, etc.]
+[Incluir instruções ...]
 
 ## Contribuição
 

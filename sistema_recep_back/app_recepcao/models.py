@@ -36,7 +36,7 @@ class Endereco(models.Model):
 class RegistroEntrada(models.Model):
     data_hora_entrada = models.DateTimeField(null=True, blank=True)
     gabinete = models.CharField(max_length=1000, null=True, blank=True)
-    visitante = models.ForeignKey(TblVisitante, on_delete=models.CASCADE, null=True)
+    visitante = models.ForeignKey(TblVisitante, on_delete=models.CASCADE, related_name='entradas')
 
 
 

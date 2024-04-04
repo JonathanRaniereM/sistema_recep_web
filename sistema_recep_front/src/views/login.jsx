@@ -31,11 +31,11 @@ const Login = () => {
 
     const onSubmit = async (data) => {
         try {
-            console.log("Dados enviados:", data);
+            
     
             const response = await axios.post('http://192.168.254.82:8000/api/login/', data);
             
-            console.log("Resposta da API:", response);
+           
     
             if (response.data.status === 'success') {
                 sessionStorage.setItem('token', response.data.token);

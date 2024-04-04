@@ -77,12 +77,23 @@ from rest_framework import filters
 from django.db.models import OuterRef, Subquery
 from django_filters.rest_framework import DjangoFilterBackend
 
+from rest_framework.pagination import PageNumberPagination
+
+class CustomPagination(PageNumberPagination):
+    page_size = 15
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+
+
 class TblVisitanteViewSet(viewsets.ModelViewSet):
     queryset = TblVisitante.objects.all()
     serializer_class = TblVisitanteSerializer
     parser_classes = (MultiPartParser, FormParser, JSONParser)  # Permite FormData além de JSON
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [filters.OrderingFilter, filters.SearchFilter]
+    search_fields = ['nome', 'entradas__data_hora_entrada','entradas__gabinete']  # Assumindo que existe um campo relacionado para entradas
     filterset_fields = ['cpf']  # Permite filtrar visitantes pelo CPF
+    pagination_class = CustomPagination
     
     def get_queryset(self):
         ultima_entrada = RegistroEntrada.objects.filter(
@@ -98,8 +109,11 @@ class RegistroEntradaViewSet(viewsets.ModelViewSet):
     serializer_class = RegistroEntradaSerializer
     parser_classes = (MultiPartParser, FormParser, JSONParser)
     queryset = RegistroEntrada.objects.all()
+    
     filter_backends = [filters.OrderingFilter]
+
     ordering_fields = ['data_hora_entrada']
+   
 
     @action(detail=False, methods=['get'], url_path='buscar_por_visitante/(?P<visitante_id>\d+)')
     def por_visitante(self, request, visitante_id=None):
@@ -140,7 +154,6 @@ class TblVisitanteViewSetLixeira(viewsets.ModelViewSet):
 
 class RegistroEntradaViewSetLixeira(viewsets.ModelViewSet):
     serializer_class = RegistroEntradaLixeiraSerializer
-
     queryset = RegistroEntrada_lixeira.objects.all()
    
   

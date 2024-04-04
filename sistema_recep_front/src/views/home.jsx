@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef,useMemo } from 'react';
 import LogoPdf from './assets/images/Logo_pdf_autorizacao.png';
 import jsPDF from 'jspdf';
 
@@ -11,7 +11,7 @@ import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 import { useWebSocketMessageHandler, WebSocketMessageHandlerProvider } from './contexts/useWebSocketService';
 import { useWebSocket, WebSocketProvider } from './contexts/WebSocketContext';
 
-
+import { useNavigate } from 'react-router-dom';
 
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import moment from 'moment';
@@ -20,7 +20,8 @@ import axios from 'axios';  // Não esqueça de importar o axios, pois está usa
 
 
 const Home = ({ setSocketRefCallback }) => {
-
+    const navigate = useNavigate();
+    const [userId, setUserId] = useState(null);
     const [NomeVisitante, setNomeVisitante] = useState("");
     const [NomeVisitanteEdit, setNomeVisitanteEdit] = useState("");
     const [CPF, setCPF] = useState("");
@@ -28,8 +29,6 @@ const Home = ({ setSocketRefCallback }) => {
     const [Email, setEmail] = useState("");
     const [DataHoraEntrada, setDataHoraEntrada] = useState("");
     const [Gabinete, setGabinete] = useState("");
-    const [IdVisitante, setIdVisitante] = useState("");
-    const [IdEntrada, setIdEntrada] = useState("");
     const [visitantes, setVisitantes] = useState([]);
     const [entradas, setEntradas] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -61,6 +60,16 @@ const Home = ({ setSocketRefCallback }) => {
     const [modalMessage, setModalMessage] = useState('');
     const visitanteIdRef = useRef(null);
     const [assinaturaPendente, setAssinaturaPendente] = useState(false);
+    const [pagina, setPagina] = useState(1);
+    const [visitantesNovosDados, setVisitantesNovosDados] = useState([]);
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+    const [entradasNovosDados, setEntradasNovosDados] = useState([]);
+    
+
+    // Ref para o elemento que será observado pelo IntersectionObserver
+    const observerRef = useRef();
+
+
     const gerarPDF = (id, nome, cpf, assinaturaDigital) => {
         const doc = new jsPDF();
 
@@ -389,13 +398,17 @@ const Home = ({ setSocketRefCallback }) => {
         doc.save(`Termo_consentimento_${nome}.pdf`);
     };
 
+  
+    
 
-    async function getUserId() {
+    const getUserId = async () => {
         const username = sessionStorage.getItem('username');
         const token = sessionStorage.getItem('token'); // Presumindo que você também armazene o token JWT
     
-        if (!username) {
-            console.error('Username não encontrado no sessionStorage');
+        if (!username || !token) {
+            console.error('Username ou token não encontrado no sessionStorage');
+            // Redireciona para a tela de login se o username ou token não estiver presente
+            window.location.href = "/"; // ou a rota da sua tela de login
             return null;
         }
     
@@ -405,6 +418,14 @@ const Home = ({ setSocketRefCallback }) => {
                     'Authorization': `Bearer ${token}`, // Assegura que a requisição é autenticada
                 }
             });
+    
+            // Checa se a resposta é de não autorizado (401)
+            if (response.status === 401) {
+                // Token inválido ou ausente, redirecione para a tela de login
+                
+                window.location.href = "/"; // ou a rota da sua tela de login
+                return null;
+            }
     
             console.log("Resposta da API:", response);
     
@@ -419,6 +440,8 @@ const Home = ({ setSocketRefCallback }) => {
             }
         } catch (error) {
             console.error('Erro ao obter o ID do login:', error);
+            // Se ocorrer um erro de rede ou outra resposta que não seja 200 OK, também redireciona para o login
+            // ou a rota da sua tela de login
             return null;
         }
     }
@@ -477,7 +500,7 @@ const Home = ({ setSocketRefCallback }) => {
     };
 
     const abrirCampoAssinaturaBio = (visitanteId) => {
-        console.log("Definindo ID do visitante para:", visitanteId);
+
         visitanteIdRef.current = visitanteId; // Atualiza a referência com o ID do visitante
         iniciarCapturaAssinaturaBio();
     };
@@ -543,7 +566,7 @@ const Home = ({ setSocketRefCallback }) => {
         }
     };
     const enviarAssinaturaParaServidor = async (id, assinaturaBlob) => {
-        console.log("ID do visitante ao enviar para o servidor:", id);
+       
         const url = `http://192.168.254.82:8000/api/manage_visitante/${id}/`;
         const token = sessionStorage.getItem('token');
 
@@ -558,8 +581,7 @@ const Home = ({ setSocketRefCallback }) => {
                     // 'Content-Type': 'application/json',
                 },
             });
-            console.log("Resposta do servidor:", response.data);
-            console.log("Assinatura atualizada com sucesso:", response.data);
+     
             setNotificationMessage("Assinatura atualizada com sucesso!" );
             setShowNotification(true);
             // Opcional: esconder a notificação após X segundos
@@ -628,11 +650,25 @@ const Home = ({ setSocketRefCallback }) => {
 
     }, [socketRefWithId, socketRefWithoutId, initializeWebSocket]);
 
+
+    const formatDate = (dateString) => {
+        // Cria um objeto moment com a data fornecida e adiciona 3 horas
+        let date = moment(dateString).add(3, 'hours');
+
+        // Formata a data e a hora para o formato desejado
+        let formattedDate = date.format('DD/MM/YYYY');
+        let formattedTime = date.format('HH:mm');
+
+        return `${formattedDate} ${formattedTime}`;
+    }
+
+
     const fetchVisitantes = useCallback(async () => {
+        
         setIsLoading(true);
         // Adiciona o parâmetro de ordenação na URL de entradas
-        const urlVisitantes = 'http://192.168.254.82:8000/api/manage_visitante/';
-        const urlEntradas = 'http://192.168.254.82:8000/api/manage_entrada/?ordering=-data_hora_entrada';
+        const urlVisitantes = `http://192.168.254.82:8000/api/manage_visitante/?page=${pagina}`;
+         const urlEntradas = `http://192.168.254.82:8000/api/manage_entrada/?ordering=-data_hora_entrada&page=${pagina}`;
         const token = sessionStorage.getItem('token');
 
         try {
@@ -645,9 +681,24 @@ const Home = ({ setSocketRefCallback }) => {
                 }),
             ]);
 
-            setVisitantes(resVisitantes.data);
-            // Assume que `resEntradas.data` é um array e já vem ordenado do backend
-            setEntradas(resEntradas.data);
+        // Supondo que resVisitantesNovos.data.results e resEntradasNovos.data sejam arrays de objetos
+        const novosVisitantes = resVisitantes.data.results;
+        const novasEntradas = resEntradas.data;
+
+        // Filtra quaisquer dados que já foram adicionados, baseando-se em um identificador único (por exemplo, ID)
+        const visitantesUnicos = novosVisitantes.filter(novoVisitante => !visitantesNovosDados.some(v => v.id === novoVisitante.id));
+        const entradasUnicas = novasEntradas.filter(novaEntrada => !entradasNovosDados.some(e => e.id === novaEntrada.id));
+
+
+        setVisitantes(novosVisitantes);
+        setEntradas(novasEntradas);
+
+        setVisitantesNovosDados(visitantesUnicos);
+        setEntradasNovosDados(entradasUnicas);
+
+  
+    
+            
         } catch (error) {
             console.error("Erro ao buscar dados", error.response?.data || error.message);
         } finally {
@@ -655,6 +706,112 @@ const Home = ({ setSocketRefCallback }) => {
         }
     }, []);
 
+    // Supondo que cada entrada e visitante tenha um ID único
+    const atualizarDadosUnicos = (dadosAntigos, novosDados) => {
+        const mapa = new Map(dadosAntigos.map(dado => [dado.id, dado]));
+    
+        novosDados.forEach(dado => {
+        mapa.set(dado.id, dado); // Isso substituirá qualquer entrada duplicada pelo mesmo ID
+        });
+    
+        return Array.from(mapa.values()); // Converte o mapa de volta para um array
+    };
+
+    useEffect(() => {
+        const buscarMaisDados = async () => {
+            // Prepara os parâmetros da query
+            const queryParams = new URLSearchParams();
+            if (filtroPesquisa) {
+                // Adiciona o parâmetro de busca
+                queryParams.append("search", filtroPesquisa);
+            } else {
+                            // Adiciona os parâmetros de paginação e ordenação
+            queryParams.append("page", pagina);
+            queryParams.append("ordering", "-data_hora_entrada");
+            }
+    
+
+    
+            const urlVisitantes = `http://192.168.254.82:8000/api/manage_visitante/?${queryParams.toString()}`;
+            const urlEntradas = `http://192.168.254.82:8000/api/manage_entrada/?${queryParams.toString()}`;
+            const token = sessionStorage.getItem('token');
+    
+            try {
+                const [resVisitantesNovos, resEntradasNovos] = await Promise.all([
+                    axios.get(urlVisitantes, { headers: { 'Authorization': 'Bearer ' + token } }),
+                    axios.get(urlEntradas, { headers: { 'Authorization': 'Bearer ' + token } }),
+                ]);
+
+                // Supondo que resVisitantesNovos.data.results e resEntradasNovos.data sejam arrays de objetos
+                const novosVisitantes = resVisitantesNovos.data.results;
+                const novasEntradas = resEntradasNovos.data;
+
+                // Filtra quaisquer dados que já foram adicionados, baseando-se em um identificador único (por exemplo, ID)
+                const visitantesUnicos = novosVisitantes.filter(novoVisitante => !visitantesNovosDados.some(v => v.id === novoVisitante.id));
+                const entradasUnicas = novasEntradas.filter(novaEntrada => !entradasNovosDados.some(e => e.id === novaEntrada.id));
+
+
+                // Dentro da função de busca de dados
+                setVisitantesNovosDados(prevDados => atualizarDadosUnicos(prevDados, resVisitantesNovos.data.results));
+                setEntradasNovosDados(prevEntradas => atualizarDadosUnicos(prevEntradas, resEntradasNovos.data));
+
+                setIsLoading(false);
+            } catch (error) {
+                console.error("Erro ao buscar dados", error.response?.data || error.message);
+            }
+        };
+    
+        buscarMaisDados();
+    }, [pagina, filtroPesquisa]); // Adiciona `filtroPesquisa` nas dependências
+    
+    
+    const hoje = moment().format('DD/MM/YYYY'); // Formata a data atual para o mesmo formato que sua função formatDate retorna
+    
+
+    const visitantesFiltrados = useMemo(() => {
+        // Decide qual conjunto de dados usar baseado no filtro aplicado
+        const dadosVisitantes = filtroData === 'hoje' ? visitantes : visitantesNovosDados;
+        const dadosEntradas = filtroData === 'hoje' ? entradas : entradasNovosDados;
+    
+        // Filtragem dos visitantes
+        return dadosVisitantes.filter((visitante) => {
+            const entrada = dadosEntradas.find(e => e.visitante === visitante.id);
+            const dataEntradaFormatada = formatDate(entrada ? entrada.data_hora_entrada : '');
+            const dataEntrada = dataEntradaFormatada.split(' ')[0]; // Separa a data da hora
+    
+            const correspondeAoNomeOuData = visitante.nome.toLowerCase().includes(filtroPesquisa.toLowerCase()) || dataEntradaFormatada.includes(filtroPesquisa);
+    
+            if (filtroData === 'hoje') {
+                // Compara apenas a data, ignorando a hora
+                return correspondeAoNomeOuData && dataEntrada === hoje;
+            } else {
+                return correspondeAoNomeOuData;
+            }
+        });
+    }, [visitantes, visitantesNovosDados, entradas, entradasNovosDados, filtroPesquisa, filtroData]);
+    
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const firstEntry = entries[0];
+                if (firstEntry.isIntersecting) {
+                    // Logic para carregar mais dados
+                    setPagina((prevPage) => prevPage + 1);
+                }
+            },
+            {
+                root: observerRef.current, // Aqui estamos usando o `right-card` como a raiz
+                threshold: 0.1, // Ajuste conforme necessário para a sensibilidade de disparo
+            }
+        );
+    
+        // Precisamos de um elemento dentro do `right-card` para observar, como um "sentinela" no final da lista
+        const sentinel = document.querySelector('.sentinela'); // Ajuste o seletor conforme necessário
+        if (sentinel) observer.observe(sentinel);
+    
+        return () => observer.disconnect();
+    }, []);
 
     useEffect(() => {
         fetchVisitantes();
@@ -662,15 +819,14 @@ const Home = ({ setSocketRefCallback }) => {
     }, []);
 
 
-
     const handleWebSocketMessage = useCallback((event) => {
-        console.log("TelaHome", event);
+       
         const message = (event);
 
 
         // Aqui você coloca a lógica para lidar com as diferentes mensagens recebidas
         if (message.type === 'insert.update') {
-            console.log("Atualizando registros...");
+     
 
             setshowSuccessSubmit(true)
             setTimeout(() => setshowSuccessSubmit(false), 3000);  // Esconde após 3 segundos
@@ -679,7 +835,7 @@ const Home = ({ setSocketRefCallback }) => {
             fetchVisitantes()
 
         } else if (message.type === 'delete.update') {
-            console.log("Atualizando registros...");
+          
 
             setshowItemExcluidoSucess(true)
             setTimeout(() => setshowItemExcluidoSucess(false), 3000);  // Esconde após 3 segundos
@@ -687,7 +843,7 @@ const Home = ({ setSocketRefCallback }) => {
             fetchVisitantes()
 
         } else if (message.type === 'editar.update') {
-            console.log("Atualizando registros...");
+          
 
             setshowSuccessEdit(true)
             setTimeout(() => setshowSuccessEdit(false), 3000);  // Esconde após 3 segundos
@@ -704,19 +860,13 @@ const Home = ({ setSocketRefCallback }) => {
     useEffect(() => {
 
         registerMessageHandler('TelaHome', handleWebSocketMessage);
-        console.log('MONTANDO TelaHome')
+   
 
         return () => {
             unregisterMessageHandler('TelaHome');
-            console.log('FECHANDO TelaHome')
+           
         };
     }, [registerMessageHandler, unregisterMessageHandler, handleWebSocketMessage]);
-
-
-
-
-
-
 
 
     const limparForm = () => {
@@ -731,7 +881,17 @@ const Home = ({ setSocketRefCallback }) => {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
+        setIsButtonDisabled(true);
 
+        // Espera 2 segundos antes de reabilitar o botão
+        setTimeout(() => setIsButtonDisabled(false), 2000);
+        const token = sessionStorage.getItem('token');
+        if (!token) {
+            console.error('Token não encontrado no sessionStorage');
+            window.location.href = "/"; // Redireciona para a tela de login
+            return; // Interrompe a execução da função se não houver token
+        }
+    
         // Verifica se a assinatura foi coletada
         if (!assinaturaImagem) {
             setshowAssinaturaNecessaria(true)
@@ -740,21 +900,38 @@ const Home = ({ setSocketRefCallback }) => {
         }
 
 
-        // Verificação da existência do CPF
-        const urlVerificaCPF = `http://192.168.254.82:8000/api/manage_visitante/?cpf=${CPF}`;
-        try {
-            const respostaCPF = await axios.get(urlVerificaCPF, {
-                headers: { 'Authorization': `Bearer ${sessionStorage.getItem('token')}` },
-            });
-            if (respostaCPF.data && respostaCPF.data.length > 0) {
-                setshowExistenteCPF(true)
-                setTimeout(() => setshowExistenteCPF(false), 3000);  // Esconde após 3 segundos
-                return;
-            }
-        } catch (error) {
-            console.error("Erro ao verificar CPF", error);
-            return;
+     // Verificação da existência do CPF
+// Verificação da existência do CPF
+const urlVerificaCPF = `http://192.168.254.82:8000/api/manage_visitante/?cpf=${CPF}`;
+try {
+    const respostaCPF = await axios.get(urlVerificaCPF, {
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('token')}` },
+    });
+    console.log('Resposta da verificação de CPF:', respostaCPF.data);
+    
+    // Altera a verificação para focar na propriedade results e seu conteúdo
+    if (respostaCPF.data.results && respostaCPF.data.results.length > 0) {
+        // Verifica se algum dos resultados tem o mesmo CPF
+        const cpfExistente = respostaCPF.data.results.some(result => result.cpf === CPF);
+        if (cpfExistente) {
+            setshowExistenteCPF(true);
+            setTimeout(() => setshowExistenteCPF(false), 3000);  // Esconde após 3 segundos
+            return; // Interrompe a execução da função se um CPF duplicado for encontrado
         }
+    }
+}  catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+        console.error('Sessão expirada ou token inválido. Redirecionando...');
+        sessionStorage.removeItem('token');
+        window.location.href = "/"; // ou a rota da sua tela de login
+        return; // Interrompe a execução da função
+    } else {
+        console.error("Erro ao verificar CPF", error);
+        return; // Interrompe a execução da função
+    }
+}
+
+
         const formDataVisitante = new FormData();
         formDataVisitante.append('nome', NomeVisitante);
         formDataVisitante.append('cpf', CPF);
@@ -809,7 +986,7 @@ const Home = ({ setSocketRefCallback }) => {
 
         const url_visitante = `http://192.168.254.82:8000/api/manage_visitante/`;
 
-        const token = sessionStorage.getItem('token');
+        
 
         try {
             // Cadastrando o visitante
@@ -820,7 +997,6 @@ const Home = ({ setSocketRefCallback }) => {
                 },
             });
 
-            console.log("Resposta do servidor (Visitante):", responseVisitante.data);
             const visitanteId = responseVisitante.data.id; // Supondo que o ID esteja diretamente na resposta
 
             // Preparando para cadastrar a entrada
@@ -841,7 +1017,7 @@ const Home = ({ setSocketRefCallback }) => {
                 },
             });
 
-            console.log("Resposta do servidor (Entrada):", responseEntrada.data);
+     
 
             limparForm()
 
@@ -853,7 +1029,7 @@ const Home = ({ setSocketRefCallback }) => {
                 type: 'insert.update',
                 targetComponent: 'TelaHome'
             };
-            console.log("Essa é a mensagem que estou enviando:", message)
+   
 
 
             if (socketRefWithoutId.current && socketRefWithoutId.current.readyState === WebSocket.OPEN) {
@@ -865,25 +1041,17 @@ const Home = ({ setSocketRefCallback }) => {
             setshowSuccessSubmit(true)
             setTimeout(() => setshowSuccessSubmit(false), 3000);  // Esconde após 3 segundos
 
-            fetchVisitantes()
+            fetchVisitantes();
+
+        
 
 
-        } catch (error) {
+        }   catch (error) {
             console.error("Erro na requisição", error.response?.data || error.message);
         }
     };
 
-    const formatDate = (dateString) => {
-        // Cria um objeto moment com a data fornecida e adiciona 3 horas
-        let date = moment(dateString).add(3, 'hours');
-
-        // Formata a data e a hora para o formato desejado
-        let formattedDate = date.format('DD/MM/YYYY');
-        let formattedTime = date.format('HH:mm');
-
-        return `${formattedDate} ${formattedTime}`;
-    }
-
+ 
     const formatPhone = (phone) => {
         if (!phone) return '';
         // Mantém os 4 primeiros dígitos e os últimos 2 dígitos visíveis
@@ -914,9 +1082,6 @@ const Home = ({ setSocketRefCallback }) => {
     };
 
 
-
-
-
     const [selectedVisitanteBackup, setSelectedVisitanteBackup] = useState({
         id: null,
         nome: '',
@@ -944,10 +1109,7 @@ const Home = ({ setSocketRefCallback }) => {
         const urlEntradaLixeira = 'http://192.168.254.82:8000/api/manage_entrada_lixeira/';
         const token = sessionStorage.getItem('token');
 
-        console.log("Dados do visitante para lixeira antes do envio:", {
-            ...selectedVisitanteBackup,
-            motivo: motivoExclusao
-        });
+
     
         // Primeiro, insira o visitante na lixeira e obtenha o ID
         const responseVisitanteLixeira = await axios.post(urlVisitanteLixeira, {
@@ -962,16 +1124,9 @@ const Home = ({ setSocketRefCallback }) => {
 
         const visitanteLixeiraId = responseVisitanteLixeira.data.id;
 
-        console.log("Dados visitantes depois de enviar:",responseVisitanteLixeira.data)
     
-        // Agora que você tem o visitanteLixeiraId, você pode logar e inserir as entradas corretamente
-        entradasDoVisitante.forEach(entrada => {
-            console.log("Dados da entrada para lixeira antes do envio:", {
-                ...entrada,
-                visitante: visitanteLixeiraId // Agora isso é válido porque visitanteLixeiraId foi definido
+    
 
-            });
-        });
 
     
         // Para cada entrada do visitante, insere na lixeira
@@ -986,14 +1141,11 @@ const Home = ({ setSocketRefCallback }) => {
                 }
             });
     
-            console.log("Resposta da inserção da entrada na lixeira:", responseEntradaLixeira.data);
+           
         }
     
         setIsModalConfirmDeleteVisible(false); // Fecha o modal
     };
-    
-    
-
     
 
     const [linhaEmEdicao, setLinhaEmEdicao] = useState(null);
@@ -1014,7 +1166,7 @@ const Home = ({ setSocketRefCallback }) => {
 
         try {
             const response = await axios.patch(url, { nome: novoNome }, { headers });
-            console.log("Resposta do servidor (Edição):", response.data);
+           
 
             setshowSuccessEdit(true)
 
@@ -1025,7 +1177,7 @@ const Home = ({ setSocketRefCallback }) => {
                 type: 'editar.update',
                 targetComponent: 'TelaHome'
             };
-            console.log("Essa é a mensagem que estou enviando:", message)
+       
 
 
             if (socketRefWithoutId.current && socketRefWithoutId.current.readyState === WebSocket.OPEN) {
@@ -1068,7 +1220,7 @@ const Home = ({ setSocketRefCallback }) => {
                 type: 'delete.update',
                 targetComponent: 'TelaHome'
             };
-            console.log("Essa é a mensagem que estou enviando:", message)
+           
 
 
             if (socketRefWithoutId.current && socketRefWithoutId.current.readyState === WebSocket.OPEN) {
@@ -1149,29 +1301,6 @@ const Home = ({ setSocketRefCallback }) => {
 
 
 
-    const hoje = moment().format('DD/MM/YYYY'); // Formata a data atual para o mesmo formato que sua função formatDate retorna
-
-    const visitantesFiltrados = visitantes.filter((visitante) => {
-        const entrada = entradas.find(e => e.visitante === visitante.id);
-        const dataEntradaFormatada = formatDate(entrada ? entrada.data_hora_entrada : '');
-
-        // Separa a data da hora, pois estamos interessados apenas na data para a comparação
-        const dataEntrada = dataEntradaFormatada.split(' ')[0]; // Pega apenas a parte da data
-
-        const correspondeAoNomeOuData = visitante.nome.toLowerCase().includes(filtroPesquisa.toLowerCase()) ||
-            dataEntradaFormatada.includes(filtroPesquisa);
-
-        if (filtroData === 'todos') {
-            return correspondeAoNomeOuData;
-        } else if (filtroData === 'hoje') {
-            // Compara apenas a data, ignorando a hora
-            return correspondeAoNomeOuData && dataEntrada === hoje;
-        }
-    });
-
-
-
-
     const [isModalViewAssinatura, setIsModalViewAssinatura] = useState(false);
     const [assinaturaVisitante, setAssinaturaVisitante] = useState({ nome: '', assinaturaUrl: '' });
 
@@ -1182,14 +1311,6 @@ const Home = ({ setSocketRefCallback }) => {
         });
         setIsModalViewAssinatura(true);
     };
-
-
-
-
-
-
-
-
 
 
     return (
@@ -1274,12 +1395,12 @@ const Home = ({ setSocketRefCallback }) => {
                         )}
 
 
-                        <button type='submit' className="register-button">Cadastrar</button>
-                    </form>
+<button type='submit' className="register-button" disabled={isButtonDisabled}>Cadastrar</button>
+</form>
                 </div>
             </div>
             <div className="right-container">
-                <div className="right-card">
+                <div className="right-card" ref={observerRef}>
                     <div className="pesquisa-e-filtro-container">
                         <div className="input-pesquisa-container">
                             <FontAwesomeIcon icon={faSearch} className="icon-pesquisa" />
@@ -1325,12 +1446,13 @@ const Home = ({ setSocketRefCallback }) => {
                             </thead>
                             <tbody>
 
-                                {visitantesFiltrados.map((visitante) => {
-                                    const entrada = entradas.find(e => e.visitante === visitante.id);
+                                {visitantesFiltrados.map((visitante, index) => {
+                                    const key = `${visitante.id}-${index}`;
+                                    const entrada = entradasNovosDados.find(e => e.visitante === visitante.id);
                                     const semAssinatura = !visitante.assinatura_digital;
 
                                     return (
-                                        <tr key={visitante.id} style={linhaEmEdicao === visitante.id ? { border: "1px solid #06547E !important", borderRadius: "5px" } : {}}>
+                                        <tr key={key} className="row-animation" style={linhaEmEdicao === visitante.id ? { border: "1px solid #06547E !important", borderRadius: "5px" } : {}}>
                                             <td>
                                                 {linhaEmEdicao === visitante.id ? (
                                                     <input
@@ -1391,6 +1513,8 @@ const Home = ({ setSocketRefCallback }) => {
                             </tbody>
                         </table>
                     )}
+                    <div className="sentinela" ref={observerRef}></div>
+
                 </div>
 
             </div>
@@ -1602,15 +1726,10 @@ function HomeScreen() {
 
     const [HomeContentSocketRef, setHomeContentSocketRef] = useState(null);
 
-
     // Função para ser chamada por HomeContent para atualizar o socketRef
     const handleSetHomeContentSocketRef = (socketRef) => {
         setHomeContentSocketRef(socketRef);
     };
-
-
-
-
 
     return (
 
