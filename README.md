@@ -1,6 +1,6 @@
 # Sistema de Recepção Web Integrado com Terminal Eletrônico de Assinatura
 
-<img width="800" src="https://raw.githubusercontent.com/JonathanRaniereM/sistema_recep_web/main/sistema_recep_front/src/views/assets/images/demonstrativo_recep.gif">
+<img width="700" src="https://raw.githubusercontent.com/JonathanRaniereM/sistema_recep_web/main/sistema_recep_front/src/views/assets/images/demonstrativo_recep.gif">
 
 ## Sobre o Projeto
 
